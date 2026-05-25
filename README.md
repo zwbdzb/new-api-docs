@@ -143,6 +143,174 @@
 - **注册地址（含推荐码）** ：[https://ciyuanshangcheng.com/register?aff=9FAN](https://ciyuanshangcheng.com/register?aff=9FAN)
 - **Sub2API项目**：[GitHub - Wei-Shaw/sub2api](https://github.com/Wei-Shaw/sub2api)
 
+
+
+## （七）视频生成 API 接口文档
+
+> **说明**：视频生成为异步接口，创建任务后需通过回调或轮询查询任务状态。详细流程请参考[官方文档](https://www.volcengine.com/docs/82379/1520757)。
+
+### 接口信息
+
+| 项目 | 说明 |
+|------|------|
+| **接口地址** | `POST http://ciyuanshangcheng.com/v1/video/generations` |
+| **Content-Type** | `application/json` |
+| **认证方式** | `Authorization: Bearer <API_KEY>` |
+
+### 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型名称，如 `doubao-seedance-2.0-fast` |
+| `prompt` | string | 是 | 文本提示词 |
+| `size` | string | 否 | 宽高比，如 `16:9`、`9:16`、`1:1`，默认 `16:9` |
+| `duration` | int | 否 | 视频时长（秒），默认 `5` |
+| `metadata` | object | 否 | 元数据，包含 `content` 数组等多模态参数 |
+| `metadata.content` | array | 否 | 内容数组，包含文本和多模态素材 |
+| `metadata.content[].type` | string | 是 | 内容类型：`text`、`image_url`、`video_url`、`audio_url` |
+| `metadata.content[].role` | string | 否 | 素材角色：`reference_image`（参考图）、`first_frame`（首帧）、`last_frame`（尾帧）、`reference_video`（参考视频）、`reference_audio`（参考音频） |
+| `metadata.watermark` | boolean | 否 | 是否添加水印，默认 `false` |
+| `metadata.generate_audio` | boolean | 否 | 是否生成音频，默认 `true` |
+
+### 一、图生视频（图片+提示词）
+
+使用单张图片作为参考，结合文本提示词生成视频。
+
+```bash
+curl http://ciyuanshangcheng.com/v1/video/generations \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --data '{
+    "model": "doubao-seedance-2.0-fast",
+    "prompt": "一只橘色的猫坐在窗台上，温暖的阳光洒在它身上，它慢慢转头看向镜头，电影风格，高清画质",
+    "size": "16:9",
+    "duration": 5,
+    "metadata": {
+      "content": [
+        {
+          "type": "text",
+          "text": "一只橘色的猫坐在窗台上，温暖的阳光洒在它身上，它慢慢转头看向镜头，电影风格，高清画质"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic1.jpg"
+          },
+          "role": "reference_image"
+        }
+      ],
+      "watermark": false,
+      "generate_audio": true
+    }
+  }'
+```
+
+### 二、首尾帧视频生成
+
+使用首帧和尾帧两张图片，生成流畅过渡的视频。
+
+```bash
+curl http://ciyuanshangcheng.com/v1/video/generations \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --data '{
+    "model": "doubao-seedance-2.0-fast",
+    "prompt": "根据首帧和尾帧图片，生成流畅过渡的高清视频",
+    "size": "16:9",
+    "duration": 8,
+    "metadata": {
+      "content": [
+        {
+          "type": "text",
+          "text": "根据首帧和尾帧图片，生成流畅过渡的高清视频"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic1.jpg"
+          },
+          "role": "first_frame"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic2.jpg"
+          },
+          "role": "last_frame"
+        }
+      ],
+      "watermark": false,
+      "generate_audio": true
+    }
+  }'
+```
+
+### 三、多模态生成（图片+视频+音频）
+
+使用多种媒体素材（图片、视频、音频）作为参考，生成高质量视频。
+
+```bash
+curl http://ciyuanshangcheng.com/v1/video/generations \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --data '{
+    "model": "doubao-seedance-2.0-fast",
+    "prompt": "全程使用视频1的第一视角构图，全程使用音频1作为背景音乐",
+    "size": "16:9",
+    "duration": 11,
+    "metadata": {
+      "content": [
+        {
+          "type": "text",
+          "text": "全程使用视频1的第一视角构图，全程使用音频1作为背景音乐。第一人称视角果茶宣传广告，需替换牌「苹苹安安」苹果果茶限定款"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic1.jpg"
+          },
+          "role": "reference_image"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic2.jpg"
+          },
+          "role": "reference_image"
+        },
+        {
+          "type": "video_url",
+          "video_url": {
+            "url": "https://ark-project.tos-cn-beijing.volces.com/doc_video/r2v_tea_video1.mp4"
+          },
+          "role": "reference_video"
+        },
+        {
+          "type": "audio_url",
+          "audio_url": {
+            "url": "https://ark-project.tos-cn-beijing.volces.com/doc_audio/r2v_tea_audio1.mp3"
+          },
+          "role": "reference_audio"
+        }
+      ],
+      "watermark": false,
+      "generate_audio": true
+    }
+  }'
+```
+
+### 注意事项
+
+1. **图片/视频URL要求**：必须为公网可访问的URL，不支持base64格式。如需使用本地文件，请先上传至云存储（TOS/OSS等）获取公网链接。
+2. **API Key安全**：请将 `YOUR_API_KEY` 替换为您在词链AI平台创建的令牌密钥。
+3. **异步处理**：视频生成为异步任务，创建任务后建议设置 `callback_url` 接收状态回调，或定期查询任务状态。
+4. **查询任务状态**：使用 `GET http://ciyuanshangcheng.com/v1/video/generations/{task_id}` 查询任务状态。
+5. **建议等待时间**：任务创建后等待10分钟再查询，每分钟查询一次，避免频繁请求。
 ---
 
 *注：本文档部分内容基于词链AI平台公开信息及社区教程整理。原页面因加载限制未能完全获取，建议以词链AI官方文档为准。*
+
+---

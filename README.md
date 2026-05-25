@@ -144,5 +144,3 @@
 - **Sub2API项目**：[GitHub - Wei-Shaw/sub2api](https://github.com/Wei-Shaw/sub2api)
 
 ---
-
-*注：本文档部分内容基于词链AI平台公开信息及社区教程整理。原页面因加载限制未能完全获取，建议以词链AI官方文档为准。*

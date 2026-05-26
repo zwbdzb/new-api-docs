@@ -1,146 +1,519 @@
-# 词链AI令牌接入 & 相关软件配置参考
+# 文生图与文生视频 API 文档
 
 > **平台定位**：词链AI稳筑接口开发，深耕长期合作，是安全第一、财务合规的企业级模型平台。致力于为开发者和企业提供高效、低成本且全面的API大模型服务，聚焦多模型统一接入、集中管理、灵活调用和场景化应用。
 
 ## 官方地址
-- **平台官网/Base URL**：`https://ciyuanshangcheng.com`
+
+- **平台地址/Base URL**：`https://ciyuanshangcheng.com`
 - **API 接口地址**：`https://ciyuanshangcheng.com/v1`
 
 ---
 
-## （一）令牌密钥生成
+## 调用简介及示例
 
-### 一、注册账户
-1. 访问词链AI官方平台，点击注册。
-2. 输入您的**用户名或邮箱** → 设置**密码** → **再次确认密码**进行注册。
-3. 注册成功后，返回登录界面，使用刚注册的用户名和密码登录。
+### 一、文生图流程简介
 
-### 二、兑换码充值（若有余额可跳过此步骤）
-1. 登录后，点击进入 **【控制台】**。
-2. 在控制台中找到 **【钱包管理】**。
-3. 输入客服提供的**兑换码**，为账户兑换额度。
+文生图接口为同步接口，调用流程：
 
-### 三、创建令牌（获取 API Key）
-1. 登录后进入控制台，找到 **「令牌管理」** 模块。
-2. 点击 **「添加令牌」**。
-3. 填写令牌名称（如“Cursor专属API Key”），选择过期时间（推荐“永不过期”），设置额度（按需选择），点击「确认创建」。
-4. 创建成功后，**立即复制生成的 API Key**（仅显示一次，建议备份保存）。
+1. 调用文生图接口，传入模型名称和提示词。
+2. 接口返回生成的图片 URL 或 Base64 数据。
 
----
+### 二、文生视频流程简介
 
-## （二）配置前准备
+视频生成任务接口是异步接口，视频生成任务流程：
 
-在开始配置各类软件之前，请准备好以下信息：
-- **API Key**：在词链AI平台创建令牌后生成的密钥。
-- **Base URL**：`https://ciyuanshangcheng.com/v1`（词链AI的API接口地址，遵循OpenAI兼容接口规范）。
+1. 调用创建视频生成任务接口创建视频生成任务。
+2. 创建任务时设置 `callback_url` 接任务的状态变化回调。
+3. 定时使用查询接口查询视频生成任务状态（**可选，作为辅助**，建议任务创建10分钟后还未收到状态回调可以主动查询，每个任务每分钟查询一次，严禁频繁查询）
+   - a. 任务 running，过段时间再查询任务状态
+   - b. 任务完成，返回视频链接，在24小时内下载生成的视频文件
 
----
+### 三、HTTP请求头
 
-## （三）各类软件/插件配置指南
+#### Header 参数
 
-### 一、Cursor 编辑器接入词链API
-**适用场景**：在Cursor中使用GPT-4o、Claude 3.5等模型进行AI编程。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| Authorization | string | 是 | 鉴权 API_KEY，格式为 Bearer `<API_KEY>` |
+| Content-Type | string | 是 | 固定为 application/json |
+| X-Trace-ID | string | 否 | 请求跟踪ID，建议填写，用于出现问题时，反馈TraceID快速排查定位。每次请求必须不同随机32位字符串，如 f3ab5c98d7e6f1a2b3c4d5e6f7a8b9c0 |
 
-**步骤**：
-1. **确认Cursor版本**：确保Cursor版本在 **0.38.0及以上**，以支持自定义OpenAI兼容API配置。
-2. **打开设置**：启动Cursor，点击左上角齿轮图标（设置），或使用快捷键 `Ctrl+,` (Windows) / `Cmd+,` (Mac)。
-3. **找到AI配置**：在设置左侧导航栏，点击「AI」选项，进入AI配置页面。
-4. **展开OpenAI兼容配置**：下拉页面，找到「OpenAI Compatible」（兼容OpenAI）配置项，点击展开。
-5. **填写配置信息**：
-   - **Base URL**：`https://ciyuanshangcheng.com/v1`
-   - **API Key**：粘贴你复制的词链API Key
-   - **Model**：根据需要填写模型名称（如 `gpt-4o`、`claude-3.5-sonnet` 等）
-6. **验证配置**：配置完成后，Cursor会自动验证连接，验证通过后即可在对话和代码补全中使用词链API提供的模型。
+### 四、支持的模型列表
 
----
+#### 文生图模型
 
-### 二、VS Code Copilot 接入词链API
-**适用场景**：在VS Code中使用GitHub Copilot插件，但调用词链API提供的模型。
+| 模型名称 | 说明 |
+|---------|------|
+| doubao-seedream-4-5-251128 | 豆包 Seedream 4.5 |
+| Tongyi-MAI/Z-Image | 通义万相 Z-Image |
 
-**步骤**：
-1. **安装插件**：在VS Code扩展商店搜索并安装 **「OAI Compatible Provider for Copilot」** 插件。
-2. **配置Base URL**：打开VS Code设置，找到该插件的设置项，将 **Base URL** 设置为 `https://ciyuanshangcheng.com/v1`。
-3. **获取并填写API Key**：在词链AI平台注册并登录后，进入「令牌管理」复制API Key。
-4. **在Copilot中配置**：
-   - 打开Copilot设置。
-   - 点击「添加模型」并选择OAI插件。
-   - 输入从词链平台获取的API Key并确认。
-5. **验证配置**：Copilot会自动获取模型列表，看到模型列表即表示配置完成。之后在Agent界面即可选择词链平台提供的各种模型。
+#### 文生视频模型
+
+| 模型名称 | 说明 |
+|---------|------|
+| doubao-seedance-2-0-260128 | 豆包 Seedance 2.0 |
+| doubao-seedance-2.0-fast | 豆包 Seedance 2.0 快速版 |
+| doubao-seedance-2.0 | 豆包 Seedance 2.0 标准版 |
 
 ---
 
-### 三、Sub2API 网关接入词链AI
-**适用场景**：将词链AI作为上游API供应商，集成到Sub2API网关中，实现统一管理和分发。
+## 接口地址
 
-**步骤**：
-1. **部署Sub2API**：使用Docker Compose一键部署Sub2API网关平台。
-2. **登录管理后台**：访问 `http://你的IP:8080`，完成数据库和管理员配置。
-3. **添加上游渠道**：在管理后台中，添加一个新的上游渠道，类型选择「API Key」。
-4. **填写词链API配置**：
-   - **Base URL**：`https://ciyuanshangcheng.com`
-   - **API Key**：你在词链AI创建的令牌密钥
-   - **支持模型**：根据需要勾选（如GPT-4o、Claude等）
-5. **生成分发Key**：在Sub2API中为用户/团队生成独立的API Key，这些Key将自动路由到词链AI的上游资源。
-6. **配置额度与限流**：在Sub2API中设置用户级和账号级并发限制、请求频率和Token速率限制。
+### 文生图接口
 
----
+| 接口类型 | 方法 | 地址 |
+|---------|------|------|
+| OpenAI 兼容接口 | POST | `https://ciyuanshangcheng.com/v1/images/generations` |
+| Playground 接口 | POST | `https://ciyuanshangcheng.com/pg/images/generations` |
+| 查询图片接口 | GET | `https://ciyuanshangcheng.com/v1/images/{image_id}` |
 
-### 四、SillyTavern 接入词链API
-**适用场景**：在SillyTavern（AI角色扮演前端）中使用词链API提供的模型进行对话。
+### 文生视频接口
 
-**步骤**：
-1. **环境准备**：确保已安装Node.js ≥18.16，并完成SillyTavern的源码安装。
-2. **进入API配置**：在SillyTavern的设置页面中，找到API连接配置部分。
-3. **填写词链API配置**：
-   - **API类型**：选择「OpenAI兼容接口」或「自定义端点」。
-   - **自定义端点/Base URL**：`https://ciyuanshangcheng.com/v1`。
-   - **API密钥**：粘贴你的词链API Key。
-   - **模型名**：填写你想要使用的模型名称（如 `gpt-4o`）。
-4. **高级安全设置（可选）** ：词链平台令牌支持绑定IP白名单、QPS限频阈值、模型访问黑名单等功能，可在词链控制台进行配置以增强安全性。
-5. **联通性测试**：保存配置后，使用SillyTavern的连接测试功能验证API是否可用。
+| 接口类型 | 方法 | 地址 |
+|---------|------|------|
+| 视频生成接口 | POST | `https://ciyuanshangcheng.com/v1/video/generations` |
+| 查询视频任务状态接口 | GET | `https://ciyuanshangcheng.com/v1/video/generations/{task_id}` |
+| OpenAI 兼容接口 | POST/GET | `https://ciyuanshangcheng.com/v1/videos` |
+| Playground 接口 | POST/GET | `https://ciyuanshangcheng.com/pg/video/generations` |
+| 视频内容获取接口 | GET | `https://ciyuanshangcheng.com/v1/videos/{task_id}/content` |
 
 ---
 
-## （四）其他软件配置思路（通用）
+## 请求参数
 
-对于其他支持自定义OpenAI兼容API的软件（如NextChat、ChatBox、LobeChat等），配置思路基本一致：
+### 文生图请求参数（`/v1/images/generations`）
 
-1. **找到设置**：在软件的设置或配置页面中，找到「模型服务」或「API 配置」相关选项。
-2. **选择接口类型**：选择「OpenAI兼容接口」或「自定义API」。
-3. **填写以下信息**：
-   - **API 地址/Base URL**：`https://ciyuanshangcheng.com/v1`
-   - **API Key**：你在词链AI创建的令牌密钥
-   - **模型名称**：根据需要填写（如 `gpt-4o`、`claude-3.5-sonnet`、`gemini-pro` 等）
-4. **保存并测试**：保存配置后，发送一条测试消息，确认模型正常回复。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| model | string | 是 | 模型名称，如 `doubao-seedream-4-5-251128` |
+| prompt | string | 是 | 文本提示词，描述生成的图片内容 |
+| n | uint | 否 | 生成图片数量，默认为 1 |
+| size | string | 否 | 图片尺寸，如 `1024x1024`、`1024x1536`、`1536x1024` |
+| quality | string | 否 | 图片质量，如 `standard`、`hd` |
+| response_format | string | 否 | 响应格式，`url` 或 `b64_json`（Base64） |
+| style | string | 否 | 图片风格，如 `realistic`、`artistic` |
+| watermark | bool | 否 | 是否添加水印，默认为 `true`，建议设为 `false` |
+| user | string | 否 | 用户标识，用于日志和计费 |
+
+### 文生视频请求参数（`/v1/video/generations`）
+
+### 统一接口请求参数（`/v1/video/generations`）
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| model | string | 是 | 模型名称，如 `doubao-seedance-2.0` |
+| prompt | string | 是 | 文本提示词，描述生成的视频内容 |
+| size | string | 否 | 视频宽高比，如 `16:9`、`9:16`、`1:1`，默认为 `16:9` |
+| duration | int | 否 | 视频时长（秒），默认为 5 |
+| metadata | object | 否 | 厂商自定义参数，包含更详细的配置 |
+
+#### metadata 字段说明
+
+`metadata` 对象支持以下子字段：
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| content | array | 内容数组，支持文本、图片、视频、音频等多种输入 |
+| watermark | bool | 是否添加水印，推荐设为 `false` |
+| generate_audio | bool | 是否生成音频 |
+| negative_prompt | string | 反向提示词，描述不想要的内容 |
+| camera_control | object | 相机控制参数 |
+| first_frame | string | 首帧图片 URL（图生视频） |
+| last_frame | string | 尾帧图片 URL（尾帧图生视频） |
+| reference_image | string | 参考图片 URL |
+| reference_video | string | 参考视频 URL |
+| reference_audio | string | 参考音频 URL |
+
+#### content 数组项格式
+
+**文本类型：**
+
+```json
+{
+  "type": "text",
+  "text": "提示词内容"
+}
+```
+
+**图片类型：**
+
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "图片URL"
+  },
+  "role": "reference_image"
+}
+```
 
 ---
 
-## （五）常见问题与注意事项
+## 请求和响应示例
 
-### 1. API Key 安全
-- **私钥仅显示一次**：创建令牌后，API Key 仅显示一次，请务必立即复制并妥善保存。
-- **禁止明文存储**：不要将 API Key 直接硬编码在代码中或上传至版本控制系统（如Git）。建议使用环境变量或密钥管理服务（如Vault）进行加密存储。
-- **最小权限原则**：在词链AI平台创建令牌时，可根据需要设置IP白名单、QPS限制、模型访问范围等，遵循最小权限原则。
+### 一、文生图
 
-### 2. 调用限制与优化
-- **速率限制**：注意词链AI平台的API调用速率限制（QPS）。可在控制台为令牌设置合理的QPS阈值，防止突发流量导致服务异常。
-- **重试策略**：在网络不稳定时，建议在客户端配置自动重试机制。推荐设置最大重试次数为3次，退避因子为1.5。
-- **超时设置**：调用API时，建议将请求超时时间设置为30-60秒，避免长时间等待。
+#### 1、请求示例-基础文生图
 
-### 3. 网络与访问
-- **国内直连**：词链AI平台支持国内直连，延迟较低。若遇到访问问题，请检查网络环境或联系平台客服。
-- **IP白名单**：如果启用了IP白名单功能，请确保调用API的服务器IP在白名单范围内，否则将被拒绝访问。
+```bash
+curl https://ciyuanshangcheng.com/v1/images/generations \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx' \
+  -d '{
+    "model": "doubao-seedream-4-5-251128",
+    "prompt": "一只可爱的橘猫坐在窗台上，阳光透过窗户洒在它身上，写实风格，高清画质",
+    "n": 1,
+    "size": "1024x1024",
+    "quality": "standard",
+    "response_format": "url",
+    "watermark": false
+  }'
+```
 
-### 4. 模型名称
-- 不同模型在API中对应不同的名称，具体支持列表请在词链AI控制台的「模型广场」中查看。
-- 常见模型名称示例：`gpt-4o`、`claude-3.5-sonnet`、`gemini-pro`、`deepseek-chat` 等。
+#### 2、请求示例-文生图（通义万相 Z-Image）
+
+```bash
+curl https://ciyuanshangcheng.com/v1/images/generations \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx' \
+  -d '{
+    "model": "Tongyi-MAI/Z-Image",
+    "prompt": "中国山水画风格，远山如黛，近水清澈，云雾缭绕，意境深远",
+    "n": 1,
+    "size": "1024x1536",
+    "watermark": false
+  }'
+```
+
+#### 3、请求示例-生成多张图片
+
+```bash
+curl https://ciyuanshangcheng.com/v1/images/generations \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx' \
+  -d '{
+    "model": "doubao-seedream-4-5-251128",
+    "prompt": "一个未来科技感的城市，高楼林立，飞行汽车穿梭其中，夜景，霓虹灯",
+    "n": 4,
+    "size": "1024x1024",
+    "response_format": "url"
+  }'
+```
+
+#### 4、文生图响应示例
+
+```json
+{
+  "created": 1234567890,
+  "data": [
+    {
+      "url": "https://example.com/generated_image.png",
+      "revised_prompt": "一只可爱的橘猫安静地坐在阳光照射的窗台上，毛发在光线下呈现金黄色，写实摄影风格，8K超高清画质"
+    }
+  ]
+}
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| created | int64 | 创建时间戳 |
+| data | array | 图片数据数组 |
+| data[].url | string | 图片 URL 地址 |
+| data[].b64_json | string | Base64 编码的图片数据（当 response_format 为 b64_json 时返回） |
+| data[].revised_prompt | string | 优化后的提示词（模型自动扩展的提示词） |
+
+### 二、文生视频
+
+#### 1、请求示例-文生视频（基础）
+
+```bash
+curl https://ciyuanshangcheng.com/v1/video/generations \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx' \
+  -d '{
+    "model": "doubao-seedance-2.0",
+    "prompt": "一只橘色的猫坐在窗台上，温暖的阳光洒在它身上，它慢慢转头看向镜头，电影风格，高清画质",
+    "duration": 5,
+    "size": "16:9"
+  }'
+```
+
+### 2、请求示例-图生视频（参考图片）
+
+```bash
+curl https://ciyuanshangcheng.com/v1/video/generations \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx' \
+  -d '{
+    "model": "doubao-seedance-2.0",
+    "prompt": "一只橘色的猫坐在窗台上，温暖的阳光洒在它身上，它慢慢转头看向镜头，电影风格，高清画质",
+    "duration": 5,
+    "size": "16:9",
+    "metadata": {
+      "content": [
+        {
+          "type": "text",
+          "text": "一只橘色的猫坐在窗台上，温暖的阳光洒在它身上，它慢慢转头看向镜头，电影风格，高清画质"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://example.com/cat.jpg"
+          },
+          "role": "reference_image"
+        }
+      ],
+      "watermark": false,
+      "generate_audio": true
+    }
+  }'
+```
+
+### 3、请求示例-首尾帧
+
+```bash
+curl https://ciyuanshangcheng.com/v1/video/generations \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx' \
+  -d '{
+    "model": "doubao-seedance-2.0",
+    "prompt": "根据首帧和尾帧图片，生成流畅过渡的高清视频",
+    "size": "16:9",
+    "duration": 8,
+    "metadata": {
+      "content": [
+        {
+          "type": "text",
+          "text": "根据首帧和尾帧图片，生成流畅过渡的高清视频"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://example.com/first_frame.jpg"
+          },
+          "role": "first_frame"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://example.com/last_frame.jpg"
+          },
+          "role": "last_frame"
+        }
+      ],
+      "watermark": false,
+      "generate_audio": true
+    }
+  }'
+```
+
+### 4、请求示例-多模态参考（图片+视频+音频）
+
+```bash
+curl https://ciyuanshangcheng.com/v1/video/generations \
+  -X POST \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx' \
+  -d '{
+    "model": "doubao-seedance-2.0",
+    "prompt": "全程使用视频1的第一视角构图，全程使用音频1作为背景音乐",
+    "size": "16:9",
+    "duration": 11,
+    "metadata": {
+      "content": [
+        {
+          "type": "text",
+          "text": "全程使用视频1的第一视角构图，全程使用音频1作为背景音乐"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://example.com/reference_image.jpg"
+          },
+          "role": "reference_image"
+        },
+        {
+          "type": "video_url",
+          "video_url": {
+            "url": "https://example.com/reference_video.mp4"
+          },
+          "role": "reference_video"
+        },
+        {
+          "type": "audio_url",
+          "audio_url": {
+            "url": "https://example.com/reference_audio.mp3"
+          },
+          "role": "reference_audio"
+        }
+      ],
+      "watermark": false,
+      "generate_audio": true
+    }
+  }'
+```
+
+### 5、视频生成响应示例
+
+```json
+{
+  "id": "video-xxx",
+  "object": "video",
+  "model": "doubao-seedance-2.0",
+  "status": "queued",
+  "progress": 0,
+  "created_at": 1234567890,
+  "task_id": "task-xxx"
+}
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | string | 任务ID |
+| object | string | 对象类型，固定为 `video` |
+| model | string | 使用的模型名称 |
+| status | string | 任务状态：`queued`（排队中）、`in_progress`（生成中）、`completed`（已完成）、`failed`（失败） |
+| progress | int | 进度百分比（0-100） |
+| created_at | int64 | 创建时间戳 |
+| task_id | string | 底层任务ID |
+
+### 6、查询视频任务响应示例
+
+#### 成功响应
+
+```json
+{
+  "id": "video-xxx",
+  "object": "video",
+  "model": "doubao-seedance-2.0",
+  "status": "completed",
+  "progress": 100,
+  "created_at": 1234567890,
+  "completed_at": 1234567950,
+  "metadata": {
+    "url": "https://example.com/generated_video.mp4"
+  }
+}
+```
+
+#### 失败响应
+
+```json
+{
+  "id": "video-xxx",
+  "object": "video",
+  "model": "doubao-seedance-2.0",
+  "status": "failed",
+  "progress": 100,
+  "created_at": 1234567890,
+  "completed_at": 1234567950,
+  "error": {
+    "message": "生成失败：内容不符合安全规范",
+    "code": "generation_failed"
+  }
+}
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| id | string | 任务ID |
+| object | string | 对象类型，固定为 `video` |
+| model | string | 使用的模型名称 |
+| status | string | 任务状态 |
+| progress | int | 进度百分比 |
+| created_at | int64 | 创建时间戳 |
+| completed_at | int64 | 完成时间戳 |
+| metadata | object | 结果元数据，包含视频URL等 |
+| error | object | 错误信息（失败时） |
 
 ---
 
-## （六）相关资源
+## 错误码说明
+
+| 错误码 | HTTP 状态码 | 说明 |
+|--------|-----------|------|
+| invalid_request_error | 400 | 请求参数错误 |
+| server_error | 500 | 服务器内部错误 |
+| rate_limit_error | 429 | 请求频率超限 |
+| authentication_error | 401 | 认证失败 |
+| permission_error | 403 | 无权限访问 |
+
+---
+
+## 提示词技巧（图片引用方式）
+
+提示词中必须使用"**素材类型+序号**"格式引用素材，序号为请求体中该素材在同类素材中的排序。例如「图片 n」指代content数组中第 n 个type="image_url"的参考图片（按数组顺序从1开始计数）。
+
+### 多模态参考
+
+- **图片参考**：参考/提取/结合 +「图片 n」中的「主体/被参考元素描述」，生成「画面描述」，保持「主体/被参考元素描述」特征一致。
+- **视频参考**：参考「视频 n」的「动作描述/运镜描述/特效描述」，生成「画面描述」，保持动作细节/运镜/特效一致。
+- **音频参考**：
+  - 音色参考：「角色」说："「台词」，音色参考「音频 n」。
+  - 音频内容参考：理想出现时机 +「音频 n」。
+
+### 编辑视频
+
+- **增加元素**：清晰描述「元素特征」+「出现时机」+「出现位置」
+- **删除元素**：点明需要删除的元素，对于保持不变的元素，在提示词中加以强调，表现更佳
+- **修改元素**：清晰描述更换元素即可
+
+### 延长视频
+
+- **延长视频**：向前/向后延长「视频n」+「需延长的视频描述」
+- **轨道补全**：「视频1」+「过渡画面描述」+接「视频2」+「过渡画面描述」+接「视频3」
+
+---
+
+## 附录：Content 数组 role 类型说明
+
+| role 值 | 类型 | 说明 |
+|---------|------|------|
+| reference_image | 图片 | 参考图片，用于风格或内容参考 |
+| first_frame | 图片 | 首帧图片，用于图生视频 |
+| last_frame | 图片 | 尾帧图片，用于首尾帧过渡生成 |
+| reference_video | 视频 | 参考视频，用于动作或风格参考 |
+| reference_audio | 音频 | 参考音频，用于背景音乐或音效 |
+
+---
+
+## 注意事项
+
+### 通用注意事项
+
+1. **API Key 安全**：API Key 仅显示一次，请务必立即复制并妥善保存，不要硬编码在代码中或上传至版本控制系统。
+2. **内容安全**：生成的内容需符合安全规范，包含违规内容的请求将被拒绝。
+3. **请求频率**：请遵守接口调用频率限制，避免触发限流（HTTP 429）。
+
+### 文生图注意事项
+
+1. **同步响应**：文生图为同步接口，调用后会直接返回图片 URL 或 Base64 数据。
+2. **图片尺寸**：支持的尺寸包括 `1024x1024`、`1024x1536`、`1536x1024` 等，具体以模型支持为准。
+3. **图片质量**：`quality` 参数支持 `standard`（标准）和 `hd`（高清），高清模式消耗更多配额。
+4. **响应格式**：`response_format` 支持 `url`（返回图片 URL）和 `b64_json`（返回 Base64 数据）。
+5. **水印设置**：建议设置 `"watermark": false` 以去除水印。
+6. **批量生成**：通过 `n` 参数可一次生成多张图片，默认生成 1 张。
+
+### 文生视频注意事项
+
+1. **异步处理**：视频生成为异步任务，提交后会返回任务ID，需要通过查询接口获取生成结果。
+2. **生成时长**：视频生成时间取决于视频时长、分辨率和当前队列情况，通常需要几分钟到几十分钟不等。
+3. **水印设置**：建议在 `metadata` 中设置 `"watermark": false` 以去除水印。
+4. **音频生成**：设置 `"generate_audio": true` 可为视频生成配套音频。
+5. **参考素材**：支持多种参考素材类型，包括参考图片（`reference_image`）、首帧（`first_frame`）、尾帧（`last_frame`）、参考视频（`reference_video`）和参考音频（`reference_audio`）。
+6. **结果下载**：视频生成完成后，请在 24 小时内下载生成的视频文件。
+
+---
+
+## 相关资源
 
 - **词链AI官方平台**：[https://ciyuanshangcheng.com](https://ciyuanshangcheng.com)
-- **注册地址（含推荐码）** ：[https://ciyuanshangcheng.com/register?aff=9FAN](https://ciyuanshangcheng.com/register?aff=9FAN)
-- **Sub2API项目**：[GitHub - Wei-Shaw/sub2api](https://github.com/Wei-Shaw/sub2api)
-
----
+- **注册地址（含推荐码）**：[https://ciyuanshangcheng.com/register?aff=9FAN](https://ciyuanshangcheng.com/register?aff=9FAN)
+- **OpenAI 图片 API 文档**：[https://platform.openai.com/docs/api-reference/images/create](https://platform.openai.com/docs/api-reference/images/create)
+- **OpenAI 视频 API 文档**：[https://platform.openai.com/docs/api-reference/videos/create](https://platform.openai.com/docs/api-reference/videos/create)

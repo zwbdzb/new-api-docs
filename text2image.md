@@ -1,10 +1,5 @@
 # 文生图API 文档
 
-## 官方地址
-
-- **平台地址/Base URL**：`https://ciyuanshangcheng.com`
-- **API 接口地址**：`https://ciyuanshangcheng.com/v1`
-
 ---
 
 ## 调用简介及示例

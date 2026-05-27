@@ -1,2 +1,3 @@
 * [Home](/)
-* [文生视频](text2Video.md)
+* [文生图](text2image.md)
+* [文生视频](text2video.md)

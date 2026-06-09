@@ -12,7 +12,7 @@
 - 本教程基于 WorkBuddy v4.24.5 版本。
 
 ## 三、获取 Agnes API Key
-访问 Agnes AI Platform：  http://ciyuanshangcheng.com/console/token
+访问token Platform：  http://ciyuanshangcheng.com/console/token
 登录后进入 API Key 页面，创建并复制 API Key。
 
 ## 四、进入自定义模型配置
@@ -104,7 +104,7 @@ Skill 创建完成后，点击技能列表，选择图像生成 Skill。
 
 ### 3. 图像或视频 Skill 创建失败
 请确认 WorkBuddy 可以正常访问 Agnes 文档地址：  
-<http://ciyuanshangcheng.com/doc/overview>  
+<https://agnes-ai.com/doc/overview>  
 同时确认当前模型具备读取文档和创建 Skill 的能力。
 
 ### 4. 视频任务长时间没有完成

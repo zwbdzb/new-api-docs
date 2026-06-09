@@ -38,6 +38,27 @@
 - **API Key**：在词链AI平台创建令牌后生成的密钥。
 - **Base URL**：`https://ciyuanshangcheng.com/v1`（词链AI的API接口地址，遵循OpenAI兼容接口规范）。
 
+验证示例脚本
+```
+ curl https://ciyuanshangcheng.com/v1/chat/completions   -H "Authorization: Bearer sk-mwNSsolIwq5KH24pmWVSaWdnjFFtqCEnW8b3uOqLmpBao7Ht"   -H "Content-Type: application/json"   -d '{
+    "model": "agnes-2.0-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful AI assistant."
+      },
+      {
+        "role": "user",
+        "content": "Explain how autonomous agents use tools to complete tasks."
+      }
+    ],
+    "temperature": 0.7,
+    "max_tokens": 1024
+  }'
+
+
+```
+
 ---
 
 ## （三）各类软件/插件配置指南

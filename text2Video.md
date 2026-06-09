@@ -33,8 +33,7 @@
 | 模型名称 | 说明 |
 |---------|------|
 | doubao-seedance-2-0-260128 | 豆包 Seedance 2.0 |
-| doubao-seedance-2.0-fast | 豆包 Seedance 2.0 快速版 |
-| doubao-seedance-2.0 | 豆包 Seedance 2.0 标准版 |
+| doubao-seedance-2-0-fast-260128| 豆包 Seedance 2.0 快速版 |
 
 ---
 

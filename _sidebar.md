@@ -3,3 +3,4 @@
 * [文生视频](text2video.md)
 * [取消任务](task-cancel.md)
 * [虚拟人素材](assert.md)
+* [WorkBuddy接入文档](WorkBuddy.md)

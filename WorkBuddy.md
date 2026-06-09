@@ -1,18 +1,18 @@
 # WorkBuddy 接入 Agnes 模型操作手册
 
 ## 一、概述
-本文档介绍如何在 WorkBuddy 中配置Tokengine自定义模型。配置完成后，WorkBuddy 可以直接调用 Tokengine 文本模型进行对话、代码、Agent 任务，也可以通过 Skill 方式使用 Tokengine图像和视频模型。
+本文档介绍如何在 WorkBuddy中配置token平台自定义模型。配置完成后，WorkBuddy 可以直接调用平台上文本模型进行对话、代码、Agent 任务，也可以通过 Skill 方式使用图像和视频模型。
 
 ## 二、准备工作
 开始配置前，请确保你已经具备以下条件：
 - 已安装 WorkBuddy。
-- 已获得 Tokengine API Key。
-- 当前网络环境可以正常访问 Tokengine API Gateway。
+- 已获得token平台API Key。
+- 当前网络环境可以正常访问平台地址。
 - 已确认需要使用的模型名称。
 - 本教程基于 WorkBuddy v4.24.5 版本。
 
 ## 三、获取 Agnes API Key
-访问 Agnes AI Platform：  https://tokengine.hanyoai.com/console/token
+访问 Agnes AI Platform：  http://ciyuanshangcheng.com/console/token
 登录后进入 API Key 页面，创建并复制 API Key。
 
 ## 四、进入自定义模型配置
@@ -33,7 +33,7 @@
 点击添加模型，并填写以下参数：
 ```
 Provider: Custom
-API Base URL: https://tokengine.hanyoai.com/v1
+API Base URL: http://ciyuanshangcheng.com/v1
 API Key: YOUR_API_KEY
 Model Name: agnes-2.0-flash
 ```
@@ -94,7 +94,7 @@ Skill 创建完成后，点击技能列表，选择图像生成 Skill。
 
 ### 1. 文本模型无法返回
 请检查 API Base URL 是否正确：  
-`https://tokengine.hanyoai.com/v1`  
+`http://ciyuanshangcheng.com/v1`  
 同时确认 API Key 是否有效。
 
 ### 2. 模型列表中看不到 agnes-2.0-flash
@@ -104,7 +104,7 @@ Skill 创建完成后，点击技能列表，选择图像生成 Skill。
 
 ### 3. 图像或视频 Skill 创建失败
 请确认 WorkBuddy 可以正常访问 Agnes 文档地址：  
-<https://tokengine.hanyoai.com/doc/overview>  
+<http://ciyuanshangcheng.com/doc/overview>  
 同时确认当前模型具备读取文档和创建 Skill 的能力。
 
 ### 4. 视频任务长时间没有完成

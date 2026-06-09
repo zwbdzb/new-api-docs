@@ -45,10 +45,10 @@
 
 | 接口类型 | 方法 | 地址 |
 |---------|------|------|
-| 视频生成接口 | POST | `https://ciyuanshangcheng.com/v1/video/generations` |
-| 查询视频任务状态接口 | GET | `https://ciyuanshangcheng.com/v1/video/generations/{task_id}` |
-| OpenAI 兼容接口 | POST/GET | `https://ciyuanshangcheng.com/v1/videos` |
-| 视频内容获取接口 | GET | `https://ciyuanshangcheng.com/v1/videos/{task_id}/content` |
+| 视频生成接口 | POST | `http://ciyuanshangcheng.com/v1/video/generations` |
+| 查询视频任务状态接口 | GET | `http://ciyuanshangcheng.com/v1/video/generations/{task_id}` |
+| OpenAI 兼容接口 | POST/GET | `http://ciyuanshangcheng.com/v1/videos` |
+| 视频内容获取接口 | GET | `http://ciyuanshangcheng.com/v1/videos/{task_id}/content` |
 
 ---
 
@@ -116,7 +116,7 @@
 #### 1、请求示例-文生视频（基础）
 
 ```bash
-curl https://ciyuanshangcheng.com/v1/video/generations \
+curl http://ciyuanshangcheng.com/v1/video/generations \
   -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-xxxxx' \
@@ -131,7 +131,7 @@ curl https://ciyuanshangcheng.com/v1/video/generations \
 ### 2、请求示例-图生视频（参考图片）
 
 ```bash
-curl https://ciyuanshangcheng.com/v1/video/generations \
+curl http://ciyuanshangcheng.com/v1/video/generations \
   -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-xxxxx' \
@@ -163,7 +163,7 @@ curl https://ciyuanshangcheng.com/v1/video/generations \
 ### 3、请求示例-首尾帧
 
 ```bash
-curl https://ciyuanshangcheng.com/v1/video/generations \
+curl http://ciyuanshangcheng.com/v1/video/generations \
   -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-xxxxx' \
@@ -202,7 +202,7 @@ curl https://ciyuanshangcheng.com/v1/video/generations \
 ### 4、请求示例-多模态参考（图片+视频+音频）
 
 ```bash
-curl https://ciyuanshangcheng.com/v1/video/generations \
+curl http://ciyuanshangcheng.com/v1/video/generations \
   -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-xxxxx' \
@@ -369,6 +369,106 @@ curl https://ciyuanshangcheng.com/v1/video/generations \
 
 ---
 
+## 取消任务
+
+### 取消任务流程简介
+
+取消任务接口用于取消已提交的视频生成任务，调用流程：
+
+1. 调用取消任务接口，传入任务ID。
+2. 接口返回取消结果，任务状态更新为 `cancelled`。
+
+### 支持的模型列表
+
+取消任务接口支持所有视频生成模型，包括但不限于：
+
+| 平台 | 模型 |
+|------|------|
+| ZLHub | doubao-seedance-2.0 |
+| Doubao/Seedance | doubao-seedance-2.0 |
+| Ali | qwen-video |
+| Kling | kling-v1 |
+| Jimeng | jimeng-v1 |
+| Vidu | vidu-v1 |
+| Hailuo | hailuo-v1 |
+| Sora | sora-2 |
+| Gemini | gemini-video |
+| Vertex | vertex-video |
+
+### 接口地址
+
+| 接口类型 | 方法 | 地址 |
+|---------|------|------|
+| OpenAI 兼容接口 | POST | `http://ciyuanshangcheng.com/v1/videos/cancel/{task_id}` |
+| ZLHub 兼容接口 | POST | `http://ciyuanshangcheng.com/v1/task/cancel/{task_id}` |
+
+### 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| task_id | string | 是 | 任务ID，从创建任务时返回的 `id` 或 `task_id` 字段 |
+
+### 请求示例
+
+#### 1、基础取消任务
+
+```bash
+curl -X POST http://ciyuanshangcheng.com/v1/videos/cancel/cgt-20260416141540-t7n9r \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx'
+```
+
+#### 2、ZLHub 兼容接口
+
+```bash
+curl -X POST http://ciyuanshangcheng.com/v1/task/cancel/cgt-20260416141540-t7n9r \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer sk-xxxxx'
+```
+
+### 响应示例
+
+```json
+{
+  "code": "success",
+  "message": "task_cancelled",
+  "data": {
+    "id": "cgt-20260416141540-t7n9r",
+    "status": "cancelled"
+  }
+}
+```
+
+### 错误响应示例
+
+```json
+{
+  "code": "task_not_exist",
+  "message": "task_not_exist",
+  "statusCode": 400
+}
+```
+
+| 错误码 | HTTP 状态码 | 说明 |
+|--------|-----------|------|
+| task_id_required | 400 | 任务ID为空 |
+| task_not_exist | 400 | 任务不存在 |
+| user_id_required | 401 | 用户未登录 |
+| get_task_failed | 500 | 获取任务失败 |
+| cancel_task_failed | 500 | 取消任务失败 |
+| channel_no_available_key | 500 | 渠道无可用密钥 |
+
+### 取消任务注意事项
+
+1. **任务状态**：取消成功后，任务状态将更新为 `cancelled`。
+2. **费用扣除**：已提交的任务在取消前可能已经产生费用，具体以平台计费规则为准。
+3. **任务不存在**：如果任务不存在或已被取消，接口将返回 `task_not_exist` 错误。
+4. **权限验证**：用户只能取消自己创建的任务。
+5. **ZLHub 兼容**：支持 ZLHub 格式的接口地址 `/v1/task/cancel/{task_id}`。
+6. **OpenAI 兼容**：支持 OpenAI 格式的接口地址 `/v1/videos/cancel/{task_id}`。
+
+---
+
 ## 注意事项
 
 
@@ -385,6 +485,6 @@ curl https://ciyuanshangcheng.com/v1/video/generations \
 
 ## 相关资源
 
-- **词链AI官方平台**：[https://ciyuanshangcheng.com](https://ciyuanshangcheng.com)
-- **注册地址（含推荐码）**：[https://ciyuanshangcheng.com/register?aff=9FAN](https://ciyuanshangcheng.com/register?aff=9FAN)
+- **词链AI官方平台**：[http://ciyuanshangcheng.com](http://ciyuanshangcheng.com)
+- **注册地址（含推荐码）**：[http://ciyuanshangcheng.com/register?aff=9FAN](http://ciyuanshangcheng.com/register?aff=9FAN)
 - **OpenAI 视频 API 文档**：[https://platform.openai.com/docs/api-reference/videos/create](https://platform.openai.com/docs/api-reference/videos/create)

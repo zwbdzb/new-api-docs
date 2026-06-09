@@ -40,8 +40,8 @@
 
 | 接口类型 | 方法 | 地址 |
 |---------|------|------|
-| OpenAI 兼容接口 | POST | `https://ciyuanshangcheng.com/v1/images/generations` |
-| 查询图片接口 | GET | `https://ciyuanshangcheng.com/v1/images/{image_id}` |
+| OpenAI 兼容接口 | POST | `http://ciyuanshangcheng.com/v1/images/generations` |
+| 查询图片接口 | GET | `http://ciyuanshangcheng.com/v1/images/{image_id}` |
 
 
 ---
@@ -72,7 +72,7 @@
 #### 1、请求示例-基础文生图
 
 ```bash
-curl https://ciyuanshangcheng.com/v1/images/generations \
+curl http://ciyuanshangcheng.com/v1/images/generations \
   -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-xxxxx' \
@@ -90,7 +90,7 @@ curl https://ciyuanshangcheng.com/v1/images/generations \
 #### 2、请求示例-文生图（通义万相 Z-Image）
 
 ```bash
-curl https://ciyuanshangcheng.com/v1/images/generations \
+curl http://ciyuanshangcheng.com/v1/images/generations \
   -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-xxxxx' \
@@ -106,7 +106,7 @@ curl https://ciyuanshangcheng.com/v1/images/generations \
 #### 3、请求示例-生成多张图片
 
 ```bash
-curl https://ciyuanshangcheng.com/v1/images/generations \
+curl http://ciyuanshangcheng.com/v1/images/generations \
   -X POST \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-xxxxx' \
@@ -156,6 +156,6 @@ curl https://ciyuanshangcheng.com/v1/images/generations \
 
 ## 相关资源
 
-- **词链AI官方平台**：[https://ciyuanshangcheng.com](https://ciyuanshangcheng.com)
-- **注册地址（含推荐码）**：[https://ciyuanshangcheng.com/register?aff=9FAN](https://ciyuanshangcheng.com/register?aff=9FAN)
+- **词链AI官方平台**：[http://ciyuanshangcheng.com](http://ciyuanshangcheng.com)
+- **注册地址（含推荐码）**：[http://ciyuanshangcheng.com/register?aff=9FAN](http://ciyuanshangcheng.com/register?aff=9FAN)
 - **OpenAI 图片 API 文档**：[https://platform.openai.com/docs/api-reference/images/create](https://platform.openai.com/docs/api-reference/images/create)

@@ -3,8 +3,8 @@
 > **平台定位**：词链AI稳筑接口开发，深耕长期合作，是安全第一、财务合规的企业级模型平台。致力于为开发者和企业提供高效、低成本且全面的API大模型服务，聚焦多模型统一接入、集中管理、灵活调用和场景化应用。
 
 ## 官方地址
-- **平台官网/Base URL**：`https://ciyuanshangcheng.com`
-- **API 接口地址**：`https://ciyuanshangcheng.com/v1`
+- **平台官网/Base URL**：`http://ciyuanshangcheng.com`
+- **API 接口地址**：`http://ciyuanshangcheng.com/v1`
 
 ---
 
@@ -36,11 +36,11 @@
 
 在开始配置各类软件之前，请准备好以下信息：
 - **API Key**：在词链AI平台创建令牌后生成的密钥。
-- **Base URL**：`https://ciyuanshangcheng.com/v1`（词链AI的API接口地址，遵循OpenAI兼容接口规范）。
+- **Base URL**：`http://ciyuanshangcheng.com/v1`（词链AI的API接口地址，遵循OpenAI兼容接口规范）。
 
 验证示例脚本
 ```
- curl https://ciyuanshangcheng.com/v1/chat/completions   -H "Authorization: Bearer sk-mwNSsolIwq5KH24pmWVSaWdnjFFtqCEnW8b3uOqLmpBao7Ht"   -H "Content-Type: application/json"   -d '{
+ curl http://ciyuanshangcheng.com/v1/chat/completions   -H "Authorization: Bearer sk-mwNSsolIwq5KH24pmWVSaWdnjFFtqCEnW8b3uOqLmpBao7Ht"   -H "Content-Type: application/json"   -d '{
     "model": "agnes-2.0-flash",
     "messages": [
       {
@@ -72,7 +72,7 @@
 3. **找到AI配置**：在设置左侧导航栏，点击「AI」选项，进入AI配置页面。
 4. **展开OpenAI兼容配置**：下拉页面，找到「OpenAI Compatible」（兼容OpenAI）配置项，点击展开。
 5. **填写配置信息**：
-   - **Base URL**：`https://ciyuanshangcheng.com/v1`
+   - **Base URL**：`http://ciyuanshangcheng.com/v1`
    - **API Key**：粘贴你复制的词链API Key
    - **Model**：根据需要填写模型名称（如 `gpt-4o`、`claude-3.5-sonnet` 等）
 6. **验证配置**：配置完成后，Cursor会自动验证连接，验证通过后即可在对话和代码补全中使用词链API提供的模型。
@@ -84,7 +84,7 @@
 
 **步骤**：
 1. **安装插件**：在VS Code扩展商店搜索并安装 **「OAI Compatible Provider for Copilot」** 插件。
-2. **配置Base URL**：打开VS Code设置，找到该插件的设置项，将 **Base URL** 设置为 `https://ciyuanshangcheng.com/v1`。
+2. **配置Base URL**：打开VS Code设置，找到该插件的设置项，将 **Base URL** 设置为 `http://ciyuanshangcheng.com/v1`。
 3. **获取并填写API Key**：在词链AI平台注册并登录后，进入「令牌管理」复制API Key。
 4. **在Copilot中配置**：
    - 打开Copilot设置。
@@ -102,7 +102,7 @@
 2. **登录管理后台**：访问 `http://你的IP:8080`，完成数据库和管理员配置。
 3. **添加上游渠道**：在管理后台中，添加一个新的上游渠道，类型选择「API Key」。
 4. **填写词链API配置**：
-   - **Base URL**：`https://ciyuanshangcheng.com`
+   - **Base URL**：`http://ciyuanshangcheng.com`
    - **API Key**：你在词链AI创建的令牌密钥
    - **支持模型**：根据需要勾选（如GPT-4o、Claude等）
 5. **生成分发Key**：在Sub2API中为用户/团队生成独立的API Key，这些Key将自动路由到词链AI的上游资源。
@@ -118,7 +118,7 @@
 2. **进入API配置**：在SillyTavern的设置页面中，找到API连接配置部分。
 3. **填写词链API配置**：
    - **API类型**：选择「OpenAI兼容接口」或「自定义端点」。
-   - **自定义端点/Base URL**：`https://ciyuanshangcheng.com/v1`。
+   - **自定义端点/Base URL**：`http://ciyuanshangcheng.com/v1`。
    - **API密钥**：粘贴你的词链API Key。
    - **模型名**：填写你想要使用的模型名称（如 `gpt-4o`）。
 4. **高级安全设置（可选）** ：词链平台令牌支持绑定IP白名单、QPS限频阈值、模型访问黑名单等功能，可在词链控制台进行配置以增强安全性。
@@ -133,7 +133,7 @@
 1. **找到设置**：在软件的设置或配置页面中，找到「模型服务」或「API 配置」相关选项。
 2. **选择接口类型**：选择「OpenAI兼容接口」或「自定义API」。
 3. **填写以下信息**：
-   - **API 地址/Base URL**：`https://ciyuanshangcheng.com/v1`
+   - **API 地址/Base URL**：`http://ciyuanshangcheng.com/v1`
    - **API Key**：你在词链AI创建的令牌密钥
    - **模型名称**：根据需要填写（如 `gpt-4o`、`claude-3.5-sonnet`、`gemini-pro` 等）
 4. **保存并测试**：保存配置后，发送一条测试消息，确认模型正常回复。
@@ -164,8 +164,8 @@
 
 ## （六）相关资源
 
-- **词链AI官方平台**：[https://ciyuanshangcheng.com](https://ciyuanshangcheng.com)
-- **注册地址（含推荐码）** ：[https://ciyuanshangcheng.com/register?aff=9FAN](https://ciyuanshangcheng.com/register?aff=9FAN)
+- **词链AI官方平台**：[http://ciyuanshangcheng.com](http://ciyuanshangcheng.com)
+- **注册地址（含推荐码）** ：[http://ciyuanshangcheng.com/register?aff=9FAN](http://ciyuanshangcheng.com/register?aff=9FAN)
 - **Sub2API项目**：[GitHub - Wei-Shaw/sub2api](https://github.com/Wei-Shaw/sub2api)
 
 ---

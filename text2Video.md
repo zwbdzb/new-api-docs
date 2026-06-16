@@ -464,7 +464,6 @@ curl -X POST http://ciyuanshangcheng.com/v1/task/cancel/cgt-20260416141540-t7n9r
 2. **费用扣除**：已提交的任务在取消前可能已经产生费用，具体以平台计费规则为准。
 3. **任务不存在**：如果任务不存在或已被取消，接口将返回 `task_not_exist` 错误。
 4. **权限验证**：用户只能取消自己创建的任务。
-5. **ZLHub 兼容**：支持 ZLHub 格式的接口地址 `/v1/task/cancel/{task_id}`。
 6. **OpenAI 兼容**：支持 OpenAI 格式的接口地址 `/v1/videos/cancel/{task_id}`。
 
 ---

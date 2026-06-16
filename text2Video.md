@@ -74,6 +74,7 @@
 |------|------|------|
 | content | array | 内容数组，支持文本、图片、视频、音频等多种输入 |
 | watermark | bool | 是否添加水印，推荐设为 `false` |
+| resolution|  string | 1080p |
 | generate_audio | bool | 是否生成音频 |
 | negative_prompt | string | 反向提示词，描述不想要的内容 |
 | camera_control | object | 相机控制参数 |

@@ -63,7 +63,7 @@
 
 ## （三）各类软件/插件配置指南
 
-### 一、Cursor 编辑器接入词链API
+### 一、Cursor 编辑器接入词链AI
 **适用场景**：在Cursor中使用GPT-4o、Claude 3.5等模型进行AI编程。
 
 **步骤**：
@@ -73,14 +73,14 @@
 4. **展开OpenAI兼容配置**：下拉页面，找到「OpenAI Compatible」（兼容OpenAI）配置项，点击展开。
 5. **填写配置信息**：
    - **Base URL**：`http://ciyuanshangcheng.com/v1`
-   - **API Key**：粘贴你复制的词链API Key
+   - **API Key**：粘贴你复制的词链AI Key
    - **Model**：根据需要填写模型名称（如 `gpt-4o`、`claude-3.5-sonnet` 等）
-6. **验证配置**：配置完成后，Cursor会自动验证连接，验证通过后即可在对话和代码补全中使用词链API提供的模型。
+6. **验证配置**：配置完成后，Cursor会自动验证连接，验证通过后即可在对话和代码补全中使用词链AI提供的模型。
 
 ---
 
-### 二、VS Code Copilot 接入词链API
-**适用场景**：在VS Code中使用GitHub Copilot插件，但调用词链API提供的模型。
+### 二、VS Code Copilot 接入词链AI
+**适用场景**：在VS Code中使用GitHub Copilot插件，但调用词链AI提供的模型。
 
 **步骤**：
 1. **安装插件**：在VS Code扩展商店搜索并安装 **「OAI Compatible Provider for Copilot」** 插件。
@@ -101,7 +101,7 @@
 1. **部署Sub2API**：使用Docker Compose一键部署Sub2API网关平台。
 2. **登录管理后台**：访问 `http://你的IP:8080`，完成数据库和管理员配置。
 3. **添加上游渠道**：在管理后台中，添加一个新的上游渠道，类型选择「API Key」。
-4. **填写词链API配置**：
+4. **填写词链AI配置**：
    - **Base URL**：`http://ciyuanshangcheng.com`
    - **API Key**：你在词链AI创建的令牌密钥
    - **支持模型**：根据需要勾选（如GPT-4o、Claude等）
@@ -110,16 +110,16 @@
 
 ---
 
-### 四、SillyTavern 接入词链API
-**适用场景**：在SillyTavern（AI角色扮演前端）中使用词链API提供的模型进行对话。
+### 四、SillyTavern 接入词链AI
+**适用场景**：在SillyTavern（AI角色扮演前端）中使用词链AI提供的模型进行对话。
 
 **步骤**：
 1. **环境准备**：确保已安装Node.js ≥18.16，并完成SillyTavern的源码安装。
 2. **进入API配置**：在SillyTavern的设置页面中，找到API连接配置部分。
-3. **填写词链API配置**：
+3. **填写词链AI配置**：
    - **API类型**：选择「OpenAI兼容接口」或「自定义端点」。
    - **自定义端点/Base URL**：`http://ciyuanshangcheng.com/v1`。
-   - **API密钥**：粘贴你的词链API Key。
+   - **API密钥**：粘贴你的词链AI Key。
    - **模型名**：填写你想要使用的模型名称（如 `gpt-4o`）。
 4. **高级安全设置（可选）** ：词链平台令牌支持绑定IP白名单、QPS限频阈值、模型访问黑名单等功能，可在词链控制台进行配置以增强安全性。
 5. **联通性测试**：保存配置后，使用SillyTavern的连接测试功能验证API是否可用。

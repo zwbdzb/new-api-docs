@@ -1,4 +1,4 @@
-# WorkBuddy 接入 Agnes 模型操作手册
+# WorkBuddy 接入 Hy3 模型操作手册
 
 ## 一、概述
 本文档介绍如何在 WorkBuddy中配置token平台自定义模型。配置完成后，WorkBuddy 可以直接调用平台上文本模型进行对话、代码、Agent 任务，也可以通过 Skill 方式使用图像和视频模型。
@@ -11,9 +11,9 @@
 - 已确认需要使用的模型名称。
 - 本教程基于 WorkBuddy v4.24.5 版本。
 
-## 三、获取 Agnes API Key
+## 三、获取 Hy3 API Key
 访问token Platform：  http://ciyuanshangcheng.com/console/token
-登录后进入 API Key 页面，创建并复制 API Key。
+登录后进入**令牌管理**页面，创建并复制 API Key。
 
 ## 四、进入自定义模型配置
 1. 打开 WorkBuddy。
@@ -60,4 +60,4 @@ Model Name: Tencent-Hunyuan/Hy3
 
 ---
 
-后面可以从WorkBuddy 专家 技能 项目模板中 倒腾各种姿势， 走上AI办公自动化巅峰赛。
+后面可以从WorkBuddy[专家] [技能] [项目模板]中倒腾各种姿势， 走上AI办公自动化巅峰赛。

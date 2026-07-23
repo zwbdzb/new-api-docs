@@ -29,11 +29,11 @@
 `Custom`  
 该选项表示使用自定义 OpenAI-Compatible API 服务。
 
-## 六、添加 Agnes 文本模型
+## 六、添加腾讯混元3 大模型
 点击添加模型，并填写以下参数：
 ```
 Provider: Custom
-API Base URL: http://ciyuanshangcheng.com/v1
+API Base URL: http://ciyuanshangcheng.com/v1/chat/completions
 API Key: YOUR_API_KEY
 Model Name: Tencent-Hunyuan/Hy3
 ```
